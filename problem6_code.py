@@ -11,6 +11,7 @@ def parse_time_expression(expression: str) -> tuple:
     if type(expression) != str:
         raise Exception
     
+    #dictionary to convert numbers to words
     numbers_to_words = {
             1: 'one',
             2: 'two',
@@ -26,6 +27,7 @@ def parse_time_expression(expression: str) -> tuple:
             12: 'twelve',
         }
 
+    #dictionary to convert words to numbers
     words_to_numbers = {value:key for key, value in numbers_to_words.items()}
 
     #Edge Cases:
@@ -79,20 +81,19 @@ def parse_time_expression(expression: str) -> tuple:
     time = re.split(r'[\:| ]', expression)
     print(time)
 
+    #am provides no information
     if time[-1] == 'am':
         time.pop()
 
+    #pm lets us know to add 12 hours
     if time[-1] == 'pm':  
         time.pop() 
-
-     
         hour_offset = 12
         print(hour_offset)
 
-    
-
     try:
         hour = int(time[0])
+        #if hour was entered outside 24-hour range, check it before adding offset
         if hour >= 24:
             return None
 
@@ -102,6 +103,7 @@ def parse_time_expression(expression: str) -> tuple:
 
     if hour >= 24:
         hour -= 12
+    # reject negative time values
     if hour < 0:
         return None
     
@@ -110,6 +112,7 @@ def parse_time_expression(expression: str) -> tuple:
         
         minute = int(time[-1])
 
+    #reject negative time values or minutes 60 or over
     if minute < 0:
         return None
     if minute >= 60:
@@ -119,9 +122,9 @@ def parse_time_expression(expression: str) -> tuple:
 
     
     
+"""
 
-
-"""print(parse_time_expression('noon'))
+print(parse_time_expression('noon'))
 print(parse_time_expression('midnight'))
 print(parse_time_expression('quarter to midnight'))
 print(parse_time_expression('quarter to noon'))

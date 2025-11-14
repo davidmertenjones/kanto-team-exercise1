@@ -46,12 +46,20 @@ def wiki_sequentially():
   
   def dl_and_save(item):
     page = wikipedia.page(item, auto_suggest=False)
+def dl_and_save(item, auto_suggest=False):
+    page = wikipedia.page(item, auto_suggest=auto_suggest)
     title = page.title
     references = convert_to_str(page.references)
     out_filename = title + ".txt"
     print(f'writing to {out_filename}')
     with open(out_filename, 'w') as fileobj:
       fileobj.write(references)
+
+# IMPLEMENTATION 1: sequential example
+def wiki_sequentially():
+  print('\nsequential function:')
+  t_start = time.perf_counter()
+  results = wikipedia.search("general artificial intelligence")
 
   for item in results:
     dl_and_save(item)
@@ -62,38 +70,21 @@ def wiki_sequentially():
 def concurrent_threads():
   
   results = wikipedia.search("general artificial intelligence")
-  
-  def dl_and_save_thread(item):
-    page = wikipedia.page(item, auto_suggest=False)
-    title = page.title
-    references = convert_to_str(page.references)
-    out_filename = title + ".txt"
-    print(f'writing to {out_filename}')
-    with open(out_filename, 'w') as fileobj:
-      fileobj.write(references)
 
   with ThreadPoolExecutor() as executor:
-    executor.map(dl_and_save_thread, results)
+    executor.map(dl_and_save, results)
 
 
 # IMPLEMENTATION 3: concurrent example w/ processes
 #  processes do not share memory; multiprocessing and concurrent.futures.ProcessPoolExecutor pickle
 #  objects in order to communicate - can't pickle nested functions so must structure accordingly
-def dl_and_save_process(item): # moved to module level in this example due to processes not sharing memory
-    page = wikipedia.page(item, auto_suggest=False)
-    title = page.title
-    references = convert_to_str(page.references)
-    out_filename = title + ".txt"
-    print(f'writing to {out_filename}')
-    with open(out_filename, 'w') as fileobj:
-      fileobj.write(references)
 
 @time_function
 def concurrent_process():
   results = wikipedia.search("general artificial intelligence")
 
   with ProcessPoolExecutor() as executor:
-    executor.map(dl_and_save_process, results)
+    executor.map(dl_and_save, results)
 
 
 if __name__ == "__main__":

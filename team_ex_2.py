@@ -8,6 +8,19 @@ import time
 import wikipedia
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
+def time_function():
+  def wrap(*args, **kwargs):
+    t_start = time.perf_counter()
+
+    result = func(*args, **kwargs)
+
+    t_end = time.perf_counter()
+    t_lapse = t_end - t_start
+    print(f'code executed in {t_lapse} seconds')
+    return result
+    
+  return wrap
+
 #convert objects produced by wikipedia package to a string var for saving to text file
 def convert_to_str(obj):
   if type(obj) == list:

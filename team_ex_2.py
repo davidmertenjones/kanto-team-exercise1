@@ -10,6 +10,7 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 def time_function(func):
   def wrap(*args, **kwargs):
+    print(func.__name__)
     t_start = time.perf_counter()
 
     result = func(*args, **kwargs)
@@ -21,18 +22,26 @@ def time_function(func):
     
   return wrap
 
+def get_user_search():
+  user_query = input("Search wikipedia for: ")
+  if len(user_query) < 4:
+    return "generative artificial intelligence"
+  return user_query
+
 #convert objects produced by wikipedia package to a string var for saving to text file
 def convert_to_str(obj):
   if type(obj) == list:
     mystr = '\n'.join(obj)
     return mystr
-  elif type(obj) in [str, int, float]:
+  elif type(obj) in [int, float]:
     return str(obj)
+  elif type(obj) == str:
+    return obj
+
 
 # IMPLEMENTATION 1: sequential example
+@time_function
 def wiki_sequentially():
-  print('\nsequential function:')
-  t_start = time.perf_counter()
   results = wikipedia.search("general artificial intelligence")
   
   def dl_and_save(item):
@@ -47,14 +56,11 @@ def wiki_sequentially():
   for item in results:
     dl_and_save(item)
 
-  t_end = time.perf_counter()
-  t_lapse = t_end - t_start
-  print(f'code executed in {t_lapse} seconds')
 
 # IMPLEMENTATION 2: concurrent example w/ threads
+@time_function
 def concurrent_threads():
-  print('\nthread pool function:')
-  t_start = time.perf_counter()
+  
   results = wikipedia.search("general artificial intelligence")
   
   def dl_and_save_thread(item):
@@ -69,9 +75,6 @@ def concurrent_threads():
   with ThreadPoolExecutor() as executor:
     executor.map(dl_and_save_thread, results)
 
-  t_end = time.perf_counter()
-  t_lapse = t_end - t_start
-  print(f'code executed in {t_lapse} seconds')
 
 # IMPLEMENTATION 3: concurrent example w/ processes
 #  processes do not share memory; multiprocessing and concurrent.futures.ProcessPoolExecutor pickle
@@ -85,17 +88,13 @@ def dl_and_save_process(item): # moved to module level in this example due to pr
     with open(out_filename, 'w') as fileobj:
       fileobj.write(references)
 
+@time_function
 def concurrent_process():
-  print('\nprocess pool function:')
-  t_start = time.perf_counter()
   results = wikipedia.search("general artificial intelligence")
 
   with ProcessPoolExecutor() as executor:
     executor.map(dl_and_save_process, results)
 
-  t_end = time.perf_counter()
-  t_lapse = t_end - t_start
-  print(f'code executed in {t_lapse} seconds')
 
 if __name__ == "__main__":
   wiki_sequentially()

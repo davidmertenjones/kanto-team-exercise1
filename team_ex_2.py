@@ -6,6 +6,7 @@
 
 import time
 import wikipedia
+from wikipedia import DisambiguationError
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 def time_function(func):
@@ -22,8 +23,7 @@ def time_function(func):
     
   return wrap
 
-def get_user_search():
-  user_query = input("Search wikipedia for: ")
+def get_user_search(user_query):
   if len(user_query) < 4:
     return "generative artificial intelligence"
   return user_query
@@ -38,28 +38,31 @@ def convert_to_str(obj):
   elif type(obj) == str:
     return obj
 
-
-# IMPLEMENTATION 1: sequential example
-@time_function
-def wiki_sequentially():
-  results = wikipedia.search("general artificial intelligence")
-  
-  def dl_and_save(item):
-    page = wikipedia.page(item, auto_suggest=False)
 def dl_and_save(item, auto_suggest=False):
-    page = wikipedia.page(item, auto_suggest=auto_suggest)
+    
+  page = wikipedia.page(item, auto_suggest=auto_suggest)
+  try:
     title = page.title
     references = convert_to_str(page.references)
+
     out_filename = title + ".txt"
     print(f'writing to {out_filename}')
     with open(out_filename, 'w') as fileobj:
       fileobj.write(references)
 
+  except DisambiguationError:
+    print(f'writing to {out_filename}')
+    with open('DisambiguationError', 'w') as fileobj:
+      fileobj.write('')
+  
+    
+    
+
+
 # IMPLEMENTATION 1: sequential example
-def wiki_sequentially():
-  print('\nsequential function:')
-  t_start = time.perf_counter()
-  results = wikipedia.search("general artificial intelligence")
+@time_function
+def wiki_sequentially(user_query):
+  results = wikipedia.search(get_user_search(user_query))
 
   for item in results:
     dl_and_save(item)
@@ -67,27 +70,27 @@ def wiki_sequentially():
 
 # IMPLEMENTATION 2: concurrent example w/ threads
 @time_function
-def concurrent_threads():
+def concurrent_threads(user_query):
   
-  results = wikipedia.search("general artificial intelligence")
+  results = wikipedia.search(get_user_search(user_query))
 
   with ThreadPoolExecutor() as executor:
     executor.map(dl_and_save, results)
-
 
 # IMPLEMENTATION 3: concurrent example w/ processes
 #  processes do not share memory; multiprocessing and concurrent.futures.ProcessPoolExecutor pickle
 #  objects in order to communicate - can't pickle nested functions so must structure accordingly
 
 @time_function
-def concurrent_process():
-  results = wikipedia.search("general artificial intelligence")
+def concurrent_process(user_query):
+  results = wikipedia.search(get_user_search(user_query))
 
   with ProcessPoolExecutor() as executor:
     executor.map(dl_and_save, results)
 
 
 if __name__ == "__main__":
-  wiki_sequentially()
-  concurrent_threads()
-  concurrent_process()
+  user_query = input("Search wikipedia for: ")
+  wiki_sequentially(user_query)
+  concurrent_threads(user_query)
+  concurrent_process(user_query)

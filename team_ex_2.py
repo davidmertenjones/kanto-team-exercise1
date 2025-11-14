@@ -16,13 +16,7 @@ def convert_to_str(obj):
   elif type(obj) in [str, int, float]:
     return str(obj)
 
-# IMPLEMENTATION 1: sequential example
-def wiki_sequentially():
-  print('\nsequential function:')
-  t_start = time.perf_counter()
-  results = wikipedia.search("general artificial intelligence")
-  
-  def dl_and_save(item):
+def dl_and_save(item):
     page = wikipedia.page(item, auto_suggest=False)
     title = page.title
     references = convert_to_str(page.references)
@@ -30,6 +24,12 @@ def wiki_sequentially():
     print(f'writing to {out_filename}')
     with open(out_filename, 'w') as fileobj:
       fileobj.write(references)
+
+# IMPLEMENTATION 1: sequential example
+def wiki_sequentially():
+  print('\nsequential function:')
+  t_start = time.perf_counter()
+  results = wikipedia.search("general artificial intelligence")
 
   for item in results:
     dl_and_save(item)
@@ -43,18 +43,9 @@ def concurrent_threads():
   print('\nthread pool function:')
   t_start = time.perf_counter()
   results = wikipedia.search("general artificial intelligence")
-  
-  def dl_and_save_thread(item):
-    page = wikipedia.page(item, auto_suggest=False)
-    title = page.title
-    references = convert_to_str(page.references)
-    out_filename = title + ".txt"
-    print(f'writing to {out_filename}')
-    with open(out_filename, 'w') as fileobj:
-      fileobj.write(references)
 
   with ThreadPoolExecutor() as executor:
-    executor.map(dl_and_save_thread, results)
+    executor.map(dl_and_save, results)
 
   t_end = time.perf_counter()
   t_lapse = t_end - t_start
@@ -63,14 +54,6 @@ def concurrent_threads():
 # IMPLEMENTATION 3: concurrent example w/ processes
 #  processes do not share memory; multiprocessing and concurrent.futures.ProcessPoolExecutor pickle
 #  objects in order to communicate - can't pickle nested functions so must structure accordingly
-def dl_and_save_process(item): # moved to module level in this example due to processes not sharing memory
-    page = wikipedia.page(item, auto_suggest=False)
-    title = page.title
-    references = convert_to_str(page.references)
-    out_filename = title + ".txt"
-    print(f'writing to {out_filename}')
-    with open(out_filename, 'w') as fileobj:
-      fileobj.write(references)
 
 def concurrent_process():
   print('\nprocess pool function:')
@@ -78,7 +61,7 @@ def concurrent_process():
   results = wikipedia.search("general artificial intelligence")
 
   with ProcessPoolExecutor() as executor:
-    executor.map(dl_and_save_process, results)
+    executor.map(dl_and_save, results)
 
   t_end = time.perf_counter()
   t_lapse = t_end - t_start

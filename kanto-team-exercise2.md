@@ -39,22 +39,26 @@ In addition to issues/areas for improvement discovered in the codebase, the refa
 If you would like, feel free to use the template below to assist with the problem.  However you decide to approach the problem as a team, be sure to document your review process.
 
 ### Issues
-- Issue 1:
+- Issue 1: Use t_start and t_end to calculate t_lapse for each of the implementation blocks. It can be replaced with a decorator to claculate the execution time for each of the implementation code blocks
 
-- Issue 2: 
+- Issue 2: Use a helper function to replace the recurring code to download the wikepedia package and save the file for each implementation package. 
 
-- Issue 3: 
+- Issue 3: Since the search phrase is hard-coded , the user should be able input their own search term.  
 
-- Issue 4:
+- Issue 4: auto_suggest=False as been defined as an argument for each of the implementation methods. Make it the default argument and update it as needed.
+  
+- Issue 5: # Remove the function for the convertion of objects produced by wikipedia package to a string variable.
+
+ 
 
 ### Tasks
 |task #| description| assignment | solution|
 |-|---|---|---|
-|1|   |   |   |
-|2|   |   |   |
-|3|   |   |   |
-|4|   |   |   |
-|5|   |   |   |
+|1| Create a wrapper function to calculate the execution time | David   | Decorator or Wrapper func  |
+|2| Create a helper function to download and save the wikepedia package | Aasish  | Helper function  |
+|3| Create e function to allow user to input their own search term| Jen  | def get_user_search, def search_wiki(user_query): |
+|4| Make auto_suggest=false a default argument |  Aashish |   |
+|5| Remove the function for the convertion of objects produced by wikipedia package to a string variable | Team  |   |
 |6|   |   |   |
 |7|   |   |   |
 |8|   |   |   |

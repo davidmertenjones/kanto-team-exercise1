@@ -39,9 +39,9 @@ def convert_to_str(obj):
     return obj
 
 def dl_and_save(item, auto_suggest=False):
-    
-  page = wikipedia.page(item, auto_suggest=auto_suggest)
   try:
+    page = wikipedia.page(item, auto_suggest=auto_suggest)
+  
     title = page.title
     references = convert_to_str(page.references)
 
@@ -51,7 +51,7 @@ def dl_and_save(item, auto_suggest=False):
       fileobj.write(references)
 
   except DisambiguationError:
-    print(f'writing to {out_filename}')
+    print(f'writing to DisambiguationError')
     with open('DisambiguationError', 'w') as fileobj:
       fileobj.write('')
   

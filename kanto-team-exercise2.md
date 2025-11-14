@@ -43,11 +43,11 @@ If you would like, feel free to use the template below to assist with the proble
 
 - Issue 2: Use a helper function to replace the recurring code to download the wikepedia package and save the file for each implementation package. 
 
-- Issue 3: Since the search phrase is hard-coded , the user should be able input their own search term.  
+- Issue 3: Since the search phrase is hard-coded , the user should be able input their own search term.  If the user input search term is less than 4 characters, default to "generative artificial intelligence"
 
 - Issue 4: auto_suggest=False as been defined as an argument for each of the implementation methods. Make it the default argument and update it as needed.
   
-- Issue 5: # Remove the function for the convertion of objects produced by wikipedia package to a string variable.
+- Issue 5: If the object already a string no need to covert the object to a string.
 
  
 
@@ -56,9 +56,9 @@ If you would like, feel free to use the template below to assist with the proble
 |-|---|---|---|
 |1| Create a wrapper function to calculate the execution time | David   | Decorator or Wrapper func  |
 |2| Create a helper function to download and save the wikepedia package | Aasish  | Helper function  |
-|3| Create e function to allow user to input their own search term| Jen  | def get_user_search, def search_wiki(user_query): |
+|3| Create e function to allow user to input their own search term, if the user input search term is less than 4 characters, default to "generative artificial intelligence"| Jen  | def get_user_search, def search_wiki(user_query): |
 |4| Make auto_suggest=false a default argument |  Aashish |   |
-|5| Remove the function for the convertion of objects produced by wikipedia package to a string variable | Team  |   |
+|5| If the object already a string no need to covert the object to a string | David  | Detect if the object is a string  |
 |6|   |   |   |
 |7|   |   |   |
 |8|   |   |   |

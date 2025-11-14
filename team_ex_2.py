@@ -8,7 +8,7 @@ import time
 import wikipedia
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
-def time_function():
+def time_function(func):
   def wrap(*args, **kwargs):
     t_start = time.perf_counter()
 

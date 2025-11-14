@@ -55,8 +55,7 @@ def dl_and_save(item, auto_suggest=False):
     with open('DisambiguationError', 'w') as fileobj:
       fileobj.write('')
   
-    
-    
+
 
 
 # IMPLEMENTATION 1: sequential example
